@@ -1,34 +1,20 @@
-def encrypt(message, shift):
-    """
-    Encrypts a message using the Caesar Cipher with the specified shift value.
-    """
-    encrypted_message = ""
-    for char in message:
+def caesar(text, key, encrypt=True):
+    result = ""
+    key = key if encrypt else -key
+    for char in text:
         if char.isalpha():
-            # Determine the ASCII value of the character
-            ascii_value = ord(char)
-            # Determine the new ASCII value by adding the shift value
-            new_ascii_value = ascii_value + shift
-            # If the new ASCII value is outside the range of letters, wrap around
-            if char.isupper():
-                if new_ascii_value > ord('Z'):
-                    new_ascii_value -= 26
-                elif new_ascii_value < ord('A'):
-                    new_ascii_value += 26
-            else:
-                if new_ascii_value > ord('z'):
-                    new_ascii_value -= 26
-                elif new_ascii_value < ord('a'):
-                    new_ascii_value += 26
-            
-            # Convert the new ASCII value back to a character and add it to the encrypted message
-            encrypted_char = chr(new_ascii_value)
-            encrypted_message += encrypted_char
+            start = ord('A') if char.isupper() else ord('a')
+            end = (ord(char) - start + key) % 26 + start
+            result += chr(end)
         else:
-            
-            # If the character is not a letter, add it to the encrypted message unchanged
-            encrypted_message += char
-    return encrypted_message
+            result += char
+    return result
 
-def decrypt(message, shift):
-    return encrypt(message, -shift)
+if __name__ == "__main__":
+    # Caesar Cipher
+    plain_text = input("Enter the plain text: ")
+    key = int(input("Enter the key: "))
+    cipher_text = caesar(plain_text, key)
+    print("Cipher Text: ", cipher_text)
+    decipher_text = caesar(cipher_text, key, encrypt=False)
+    print("Deciphered Text: ", decipher_text)
